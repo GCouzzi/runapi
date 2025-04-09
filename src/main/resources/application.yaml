@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: Run API
+  datasource:
+    url: jdbc:postgresql://localhost:5432/runapi
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+openrouteservice:
+  api:
+    key: 5b3ce3597851110001cf62484472f9b9e65741c1b18274835eeda0b2
+  base:
+    url: https://api.openrouteservice.org/v2/directions/foot-walking
