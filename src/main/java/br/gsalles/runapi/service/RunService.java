@@ -1,11 +1,16 @@
 package br.gsalles.runapi.service;
 
 import br.gsalles.runapi.dto.RunDTO;
+import br.gsalles.runapi.exception.EntityNotFoundException;
 import br.gsalles.runapi.model.Location;
 import br.gsalles.runapi.model.Run;
 import br.gsalles.runapi.model.User;
 import br.gsalles.runapi.repository.RunRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,56 +47,64 @@ public class RunService {
     @Transactional
     public Run end(Long id) {
         Run run = runRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Run not found")
+                () -> new EntityNotFoundException("Run not found")
         );
         run.setEndDate(LocalDateTime.now());
         return run;
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findAll() {
-        return runRepository.findAll();
+    public Page<Run> findAll(int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
     public Run findById(Long id) {
         return runRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Run not found")
+                () -> new EntityNotFoundException("Run not found")
         );
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByUserId(Long id) {
-        return runRepository.findByUserId(id);
+    public Page<Run> findByUserId(Long id, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByUserId(id, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByDistanceGreaterThan(Double distance) {
-        return runRepository.findByDistanceGreaterThan(distance);
+    public Page<Run> findByDistanceGreaterThan(Double distance, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByDistanceGreaterThan(distance, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByDistanceLessThan(Double distance) {
-        return runRepository.findByDistanceLessThan(distance);
+    public Page<Run> findByDistanceLessThan(Double distance, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByDistanceLessThan(distance, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByStartDateBetween(LocalDateTime start, LocalDateTime end) {
-        return runRepository.findByStartDateBetween(start, end);
+    public Page<Run> findByStartDateBetween(LocalDateTime start, LocalDateTime end, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByStartDateBetween(start, end, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByUserIdAndDistanceGreaterThan(Long id, Double distance) {
-        return runRepository.findByUserIdAndDistanceGreaterThan(id, distance);
+    public Page<Run> findByUserIdAndDistanceGreaterThan(Long id, Double distance, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByUserIdAndDistanceGreaterThan(id, distance, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByUserIdAndDistanceLessThan(Long id, Double distance) {
-        return runRepository.findByUserIdAndDistanceLessThan(id, distance);
+    public Page<Run> findByUserIdAndDistanceLessThan(Long id, Double distance, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByUserIdAndDistanceLessThan(id, distance, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Run> findByUserIdAndStartDateBetween(Long id, LocalDateTime start, LocalDateTime end) {
-        return runRepository.findByUserIdAndStartDateBetween(id, start, end);
+    public Page<Run> findByUserIdAndStartDateBetween(Long id, LocalDateTime start, LocalDateTime end, int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return runRepository.findByUserIdAndStartDateBetween(id, start, end, pageable);
     }
 }

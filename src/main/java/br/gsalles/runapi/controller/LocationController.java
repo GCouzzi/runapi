@@ -2,10 +2,12 @@ package br.gsalles.runapi.controller;
 
 import br.gsalles.runapi.dto.LocationDTO;
 import br.gsalles.runapi.mapper.LocationMapper;
+import br.gsalles.runapi.mapper.PageMapper;
 import br.gsalles.runapi.rdto.LocationResponseDTO;
 import br.gsalles.runapi.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class LocationController {
 
     private final LocationService locationService;
     private final LocationMapper locationMapper;
+    private final PageMapper pageMapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -41,8 +44,11 @@ public class LocationController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<LocationResponseDTO>> findAll() {
-        return ResponseEntity.ok(locationMapper.listLocationToListLocationResponseDTO(locationService.findAll()));
+    public ResponseEntity<Page<LocationResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size,
+                                                             @RequestParam(defaultValue = "fullname") String sort,
+                                                             @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(pageMapper.pageLocationToPageLocationResponseDTO(locationService.findAll(page, size, sort, direction)));
     }
 
     @DeleteMapping(path = "{id}")

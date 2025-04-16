@@ -3,12 +3,14 @@ package br.gsalles.runapi.controller;
 import br.gsalles.runapi.dto.EmailDTO;
 import br.gsalles.runapi.dto.PasswordDTO;
 import br.gsalles.runapi.dto.UserDTO;
+import br.gsalles.runapi.mapper.PageMapper;
 import br.gsalles.runapi.mapper.UserMapper;
 import br.gsalles.runapi.model.User;
 import br.gsalles.runapi.rdto.UserResponseDTO;
 import br.gsalles.runapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final PageMapper pageMapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -35,8 +38,11 @@ public class UserController {
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<UserResponseDTO>> findAll() {
-        return ResponseEntity.ok(userMapper.listUserToListUserResponseDTO(userService.findAll()));
+    public ResponseEntity<Page<UserResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size,
+                                                         @RequestParam(defaultValue = "fullname") String sort,
+                                                         @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(pageMapper.pageUserToPageUserResponseDTO(userService.findAll(page, size, sort, direction)));
     }
 
     @GetMapping(path = "email", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -45,8 +51,12 @@ public class UserController {
     }
 
     @GetMapping(path = "name", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<UserResponseDTO>> findContainsName(@RequestParam String name) {
-        return ResponseEntity.ok(userMapper.listUserToListUserResponseDTO(userService.findContainsName(name)));
+    public ResponseEntity<Page<UserResponseDTO>> findContainsName(@RequestParam String name,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam(defaultValue = "fullname") String sort,
+                                                                  @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(pageMapper.pageUserToPageUserResponseDTO(userService.findContainsName(name, page, size, sort, direction)));
     }
 
     @PatchMapping(path = "password/{id}",

@@ -1,11 +1,15 @@
 package br.gsalles.runapi.service;
 
 import br.gsalles.runapi.dto.LocationDTO;
+import br.gsalles.runapi.exception.EntityNotFoundException;
 import br.gsalles.runapi.mapper.LocationMapper;
 import br.gsalles.runapi.model.Location;
-import br.gsalles.runapi.rdto.LocationResponseDTO;
 import br.gsalles.runapi.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,26 +30,27 @@ public class LocationService {
     @Transactional(readOnly = true)
     public Location findByName(String name) {
         return locationRepository.findByName(name).orElseThrow(
-                                () -> new RuntimeException("Location not found")
+                                () -> new EntityNotFoundException("Location not found")
         );
     }
 
     @Transactional(readOnly = true)
     public Location findById(Long id) {
         return locationRepository.findById(id).orElseThrow(
-                        () -> new RuntimeException("Location not found")
+                        () -> new EntityNotFoundException("Location not found")
         );
     }
 
     @Transactional(readOnly = true)
-    public List<Location> findAll() {
-        return locationRepository.findAll();
+    public Page<Location> findAll(int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sort);
+        return locationRepository.findAll(pageable);
     }
 
     @Transactional
     public void delete(Long id) {
         Location location = locationRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Location not found")
+                () -> new EntityNotFoundException("Location not found")
         );
         locationRepository.delete(location);
     }
@@ -53,7 +58,7 @@ public class LocationService {
     @Transactional
     public void update(Long id, LocationDTO locationDTO) {
         Location location = locationRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Location not found")
+                () -> new EntityNotFoundException("Location not found")
         );
         locationMapper.updateLocationFromDTO(locationDTO, location);
     }
