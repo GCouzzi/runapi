@@ -46,7 +46,7 @@ public class LocationController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Page<LocationResponseDTO>> findAll(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int size,
-                                                             @RequestParam(defaultValue = "name") String sort,
+                                                             @RequestParam(defaultValue = "fullname") String sort,
                                                              @RequestParam(defaultValue = "asc") String direction) {
         return ResponseEntity.ok(pageMapper.pageLocationToPageLocationResponseDTO(locationService.findAll(page, size, sort, direction)));
     }

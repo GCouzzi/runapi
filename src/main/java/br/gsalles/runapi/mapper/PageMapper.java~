@@ -9,10 +9,9 @@ import br.gsalles.runapi.rdto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
+@S
 public class PageMapper {
 
     private final UserMapper userMapper;
