@@ -1,7 +1,9 @@
 package br.gsalles.runapi.controller;
 
 import br.gsalles.runapi.dto.AuthDTO;
+import br.gsalles.runapi.rdto.AuthResponseDTO;
 import br.gsalles.runapi.repository.UserRepository;
+import br.gsalles.runapi.security.JwtProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,14 +26,15 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtProvider jwtProvider;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody @Valid AuthDTO authDTO) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthDTO authDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authDTO.getEmail(),
                 authDTO.getPassword()
         ));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        String token = jwtProvider.generateToken(authentication);
+        return ResponseEntity.ok(new AuthResponseDTO(token));
     }
 }
