@@ -15,9 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,15 +26,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public User create(UserDTO userDTO) {
-        if(userRepository.existsByEmail(userDTO.getEmail())){
-            throw new EmailAlreadyExistsException("Email already exists");
-        }
         User user = userMapper.userDTOToUser(userDTO);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -62,21 +58,21 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("User not found")
         );
-        if(!bCryptPasswordEncoder.matches(passwordDTO.getCurrentPassword(), user.getPassword())) {
+        if(!passwordDTO.getCurrentPassword().equals(user.getPassword())) {
             throw new InvalidCurrentPasswordException("Current password incorrect");
         }
-        if(bCryptPasswordEncoder.matches(passwordDTO.getNewPassword(), user.getPassword())) {
+        if(passwordDTO.getCurrentPassword().equals(passwordDTO.getNewPassword())) {
             throw new InvalidPasswordChangeException("New password can't be the same as current password");
         }
         if(!passwordDTO.getNewPassword().equals(passwordDTO.getConfirmNewPassword())) {
             throw new InvalidPasswordChangeException("Passwords don't match");
         }
-        user.setPassword(bCryptPasswordEncoder.encode(passwordDTO.getNewPassword()));
+        user.setPassword(passwordDTO.getNewPassword());
     }
 
     @Transactional
     public void updateEmail(EmailDTO emailDTO, Long id) {
-        if(userRepository.existsByEmail(emailDTO.getEmail())){
+        if(userRepository.findByEmail(emailDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 

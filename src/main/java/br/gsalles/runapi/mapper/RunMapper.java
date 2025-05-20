@@ -12,8 +12,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RunMapper {
 
-    RunMapper INSTANCE = Mappers.getMapper(RunMapper.class);
-
     @Mappings({
             @Mapping(target = "startLocationName", source = "startLocation.name"),
             @Mapping(target = "endLocationName", source = "endLocation.name"),

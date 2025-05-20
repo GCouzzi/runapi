@@ -30,6 +30,14 @@ public class User {
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    public User.Role role = User.Role.USER;
+
+    public enum Role {
+        USER,
+        ADMIN
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

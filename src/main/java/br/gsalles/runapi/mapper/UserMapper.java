@@ -13,8 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     @Mappings({
             @Mapping(target = "fullname", source = "fullname"),
             @Mapping(target = "email", source = "email"),
