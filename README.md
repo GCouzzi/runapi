@@ -28,6 +28,8 @@ API REST desenvolvida com **Spring Boot** para gerenciamento de **usuários**, *
 - Integração com a **OpenRouteService API** para cálculo de **distância e rotas geográficas**
 - Padrão **RESTful** com boas práticas no design da API
 
+---
+
 ## 🛠 Tecnologias Utilizadas
 - Spring WebFlux
 - Spring Data JPA
