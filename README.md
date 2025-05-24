@@ -1,27 +1,39 @@
-🏃‍♂️ RunAPI
-API REST desenvolvida com Spring Boot para gerenciamento de usuários, localizações e corridas, com foco em segurança, desempenho e integração com serviços externos de rotas.
+# 🏃‍♂️ RunAPI
 
-✨ Funcionalidades
-Cadastro e gerenciamento de usuários
+API REST desenvolvida com **Spring Boot** para gerenciamento de **usuários**, **localizações** e **corridas**, com foco em segurança, desempenho e integração com serviços externos de rotas.
 
-Registro de localizações
+---
 
-Criação e consulta de corridas entre localizações
+## ✨ Funcionalidades
 
-Cálculo de rotas e distâncias reais via OpenRouteService API
+- Cadastro e gerenciamento de usuários
+- Registro de localizações
+- Criação e consulta de corridas entre localizações
+- Cálculo de rotas e distâncias reais via **OpenRouteService API**
 
-🔒 Segurança
-Autenticação e autorização com JWT Token via Spring Security
+---
 
-Proteção de endpoints para acesso autenticado
+## 🔒 Segurança
 
-📦 Principais recursos técnicos
-Paginação e ordenamento nos endpoints, com suporte a parâmetros dinâmicos
+- Autenticação e autorização com **JWT Token** utilizando **Spring Security**
+- Proteção de endpoints restritos para usuários autenticados
 
-Content Negotiation com suporte a respostas em JSON e XML
+---
 
-Validação de dados com Spring Boot Starter Validation
+## ⚙️ Recursos Técnicos
 
-Integração com a OpenRouteService API para cálculo de distância e rota geográfica
+- **Paginação** e **ordenamento** nos endpoints com parâmetros customizáveis
+- **Content Negotiation** com suporte a respostas em **JSON** e **XML**
+- **Validação de dados** com **Spring Boot Starter Validation**
+- Integração com a **OpenRouteService API** para cálculo de **distância e rotas geográficas**
+- Padrão **RESTful** com boas práticas no design da API
 
-Padrão RESTful com uso de boas práticas de design de API
+## 🛠 Tecnologias Utilizadas
+- Spring WebFlux
+- Spring Data JPA
+- PostgreSQL
+- OpenRouteService API
+- Spring Security
+- Spring Bean Validation
+- MapStruct
+- Lombok
